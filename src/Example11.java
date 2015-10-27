@@ -134,7 +134,7 @@ public class Example11 {
 		
 		wrapper.doAuthentication();
 		
-		// MODIFY PENDING ORDER WITH STREAMING
+		// MODIFY PENDING ORDER WITH ORDER STREAMING
 
 		// Open order streaming
 		ArthikaHFTPriceListenerImp11 listener = new ArthikaHFTPriceListenerImp11();

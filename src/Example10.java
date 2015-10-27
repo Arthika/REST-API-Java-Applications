@@ -134,7 +134,7 @@ public class Example10 {
 		
 		wrapper.doAuthentication();
 		
-		// CANCEL PENDING ORDER WITH STREAMING
+		// CANCEL PENDING ORDER WITH ORDER STREAMING
 
 		// Open order streaming
 		ArthikaHFTPriceListenerImp10 listener = new ArthikaHFTPriceListenerImp10();

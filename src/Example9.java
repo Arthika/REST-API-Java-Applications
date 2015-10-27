@@ -33,7 +33,7 @@ public class Example9 {
 		
 		wrapper.doAuthentication();
 		
-		// MODIFY PENDING ORDER WITH POLLING
+		// MODIFY PENDING ORDER WITH ORDER POLLING
 		
 		System.out.println("Starting Polling1");
 		List<ArthikaHFT.orderTick> orderTickList1 = wrapper.getOrder(null, null, Arrays.asList("pending"));

@@ -33,7 +33,7 @@ public class Example8 {
 		
 		wrapper.doAuthentication();
 		
-		// CANCEL PENDING ORDER WITH POLLING
+		// CANCEL PENDING ORDER WITH ORDER POLLING
 		
 		System.out.println("Starting Polling1");
 		List<ArthikaHFT.orderTick> orderTickList1 = wrapper.getOrder(null, null, Arrays.asList("pending", "canceled"));

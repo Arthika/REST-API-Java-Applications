@@ -33,7 +33,7 @@ public class Example13 {
 		
 		wrapper.doAuthentication();
 		
-		// ORDER CREATION
+		// MULTIPLE ORDER CREATION
 		
 		ArthikaHFT.orderRequest order1 = new ArthikaHFT.orderRequest();
 		order1.security = "EUR_USD";
@@ -133,8 +133,6 @@ public class Example13 {
 			password = prop.getProperty("password");
 			authentication_port = prop.getProperty("authentication-port");
 			request_port = prop.getProperty("request-port");
-			//user = "jaime_api";
-			//password = "jaime_api";
 		}
 		catch (IOException ex) {
 			ex.printStackTrace();
