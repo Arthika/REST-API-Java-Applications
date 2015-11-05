@@ -35,8 +35,11 @@ public class Example9 {
 		
 		// MODIFY PENDING ORDER WITH ORDER POLLING
 		
+		// get tinterfaces
+		List<ArthikaHFT.tinterfaceTick> tinterfaceTickList = wrapper.getInterface();
+		
 		System.out.println("Starting Polling1");
-		List<ArthikaHFT.orderTick> orderTickList1 = wrapper.getOrder(null, null, Arrays.asList("pending"));
+		List<ArthikaHFT.orderTick> orderTickList1 = wrapper.getOrder(null, null, Arrays.asList(ArthikaHFT.ORDERTYPE_PENDING));
 		for (ArthikaHFT.orderTick tick : orderTickList1){
 			System.out.println("TempId: " + tick.tempid + " OrderId: " + tick.orderid + " Security: " + tick.security + " Account: " + tick.account + " Quantity: " + tick.quantity + " Type: " + tick.type + " Side: " + tick.side + " Status: " + tick.status + " Price: " + tick.limitprice);
 		}
@@ -44,13 +47,14 @@ public class Example9 {
 		Thread.sleep(2000);
 		
 		// Create pending order. If buy, order price must be lower than current price
+		String tinterface1 = tinterfaceTickList.get(0).name;
 		ArthikaHFT.orderRequest order1 = new ArthikaHFT.orderRequest();
 		order1.security = "EUR_USD";
-		order1.tinterface = "Baxter_CNX";
+		order1.tinterface = tinterface1;
 		order1.quantity = 500000;
-		order1.side = "buy";
-		order1.type = "limit";
-		order1.timeinforce = "day";
+		order1.side = ArthikaHFT.SIDE_BUY;
+		order1.type = ArthikaHFT.TYPE_LIMIT;
+		order1.timeinforce = ArthikaHFT.VALIDITY_DAY;
 		order1.price = 1.00548;
 		
 		System.out.println("Sending order");
@@ -66,7 +70,7 @@ public class Example9 {
 		Thread.sleep(2000);
 		
 		System.out.println("Starting Polling2");
-		List<ArthikaHFT.orderTick> orderTickList2 = wrapper.getOrder(null, null, Arrays.asList("pending"));
+		List<ArthikaHFT.orderTick> orderTickList2 = wrapper.getOrder(null, null, Arrays.asList(ArthikaHFT.ORDERTYPE_PENDING));
 		for (ArthikaHFT.orderTick tick : orderTickList2){
 			System.out.println("TempId: " + tick.tempid + " OrderId: " + tick.orderid + " Security: " + tick.security + " Account: " + tick.account + " Quantity: " + tick.quantity + " Type: " + tick.type + " Side: " + tick.side + " Status: " + tick.status + " Price: " + tick.limitprice);
 			if (tempid==tick.tempid){
@@ -90,7 +94,7 @@ public class Example9 {
 		Thread.sleep(2000);
 		
 		System.out.println("Starting Polling3");
-		List<ArthikaHFT.orderTick> orderTickList3 = wrapper.getOrder(null, null, Arrays.asList("pending"));
+		List<ArthikaHFT.orderTick> orderTickList3 = wrapper.getOrder(null, null, Arrays.asList(ArthikaHFT.ORDERTYPE_PENDING));
 		for (ArthikaHFT.orderTick tick : orderTickList3){
 			System.out.println("TempId: " + tick.tempid + " OrderId: " + tick.orderid + " Security: " + tick.security + " Account: " + tick.account + " Quantity: " + tick.quantity + " Type: " + tick.type + " Side: " + tick.side + " Status: " + tick.status + " Price: " + tick.limitprice);
 		}

@@ -1,7 +1,9 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.codec.DecoderException;
@@ -33,9 +35,13 @@ public class Example4 {
 		wrapper.doAuthentication();
 		
 		// POSITION POLLING
+		
+		// get accounts
+		List<ArthikaHFT.accountTick> accountTickList = wrapper.getAccount();
 
 		System.out.println("Starting Polling1");
 		ArthikaHFT.positionTick priceTickList1 = wrapper.getPosition(null, Arrays.asList("EUR_USD", "GBP_JPY", "GBP_USD"), null);
+		System.out.println("StrategyPL: " + priceTickList1.accountingTick.strategyPL + " TotalEquity: " + priceTickList1.accountingTick.totalequity + " UsedMargin: " + priceTickList1.accountingTick.usedmargin + " FreeMargin: " + priceTickList1.accountingTick.freemargin);
 		for (ArthikaHFT.assetPositionTick tick : priceTickList1.assetPositionTickList){
 			System.out.println("Asset: " + tick.asset + " Account: " + tick.account + " Exposure: " + tick.exposure + " TotalRisk: " + tick.totalrisk);
 		}
@@ -45,7 +51,14 @@ public class Example4 {
 		System.out.println("Polling1 Finished");
 		
 		System.out.println("Starting Polling2");
-		ArthikaHFT.positionTick priceTickList2 = wrapper.getPosition(Arrays.asList("EUR", "GBP", "JPY", "USD"), null, Arrays.asList("Cantor", "Baxter"));
+		List<String> accountlist = null;
+		if (accountTickList!=null && accountTickList.size()>1){
+			accountlist = new ArrayList<String>();
+			accountlist.add(accountTickList.get(0).name);
+			accountlist.add(accountTickList.get(1).name);
+		}
+		ArthikaHFT.positionTick priceTickList2 = wrapper.getPosition(Arrays.asList("EUR", "GBP", "JPY", "USD"), null, accountlist);
+		System.out.println("StrategyPL: " + priceTickList1.accountingTick.strategyPL + " TotalEquity: " + priceTickList1.accountingTick.totalequity + " UsedMargin: " + priceTickList1.accountingTick.usedmargin + " FreeMargin: " + priceTickList1.accountingTick.freemargin);
 		for (ArthikaHFT.assetPositionTick tick : priceTickList2.assetPositionTickList){
 			System.out.println("Asset: " + tick.asset + " Account: " + tick.account + " Exposure: " + tick.exposure + " TotalRisk: " + tick.totalrisk);
 		}

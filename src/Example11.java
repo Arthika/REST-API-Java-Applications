@@ -31,7 +31,7 @@ class ArthikaHFTPriceListenerImp11 implements ArthikaHFTPriceListener {
 	@Override
 	public void priceEvent(List<ArthikaHFT.priceTick> priceTickList) {
 		for (ArthikaHFT.priceTick tick : priceTickList){
-			System.out.println("Security: " + tick.security + " Price: " + tick.price + " Side: " + tick.side + " Liquidity: " + tick.liquidity);
+			System.out.println("Security: " + tick.security + " Price: " + String.format("%." + tick.pips + "f", tick.price) + " Side: " + tick.side + " TI: " + tick.tinterface + " Liquidity: " + tick.liquidity);
 		}
 	}
 	
@@ -135,6 +135,9 @@ public class Example11 {
 		wrapper.doAuthentication();
 		
 		// MODIFY PENDING ORDER WITH ORDER STREAMING
+		
+		// get tinterfaces
+		List<ArthikaHFT.tinterfaceTick> tinterfaceTickList = wrapper.getInterface();
 
 		// Open order streaming
 		ArthikaHFTPriceListenerImp11 listener = new ArthikaHFTPriceListenerImp11();
@@ -142,13 +145,14 @@ public class Example11 {
 		Thread.sleep(5000);
 		
 		// Create pending order. If buy, order price must be lower than current price
+		String tinterface1 = tinterfaceTickList.get(0).name;
 		ArthikaHFT.orderRequest order1 = new ArthikaHFT.orderRequest();
 		order1.security = "EUR_USD";
-		order1.tinterface = "Baxter_CNX";
+		order1.tinterface = tinterface1;
 		order1.quantity = 500000;
-		order1.side = "buy";
-		order1.type = "limit";
-		order1.timeinforce = "day";
+		order1.side = ArthikaHFT.SIDE_BUY;
+		order1.type = ArthikaHFT.TYPE_LIMIT;
+		order1.timeinforce = ArthikaHFT.VALIDITY_DAY;
 		order1.price = 1.00548;
 		List<ArthikaHFT.orderRequest> orderList = wrapper.setOrder(Arrays.asList(order1));
 		int tempid = -1;

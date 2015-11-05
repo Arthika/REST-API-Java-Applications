@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -27,7 +28,7 @@ class ArthikaHFTPriceListenerImp1 implements ArthikaHFTPriceListener {
 	@Override
 	public void priceEvent(List<ArthikaHFT.priceTick> priceTickList) {
 		for (ArthikaHFT.priceTick tick : priceTickList){
-			System.out.println("Security: " + tick.security + " Price: " + tick.price + " Side: " + tick.side + " Liquidity: " + tick.liquidity);
+			System.out.println("Security: " + tick.security + " Price: " + String.format("%." + tick.pips + "f", tick.price) + " Side: " + tick.side + " TI: " + tick.tinterface + " Liquidity: " + tick.liquidity);
 		}
 	}
 	
@@ -131,12 +132,21 @@ public class Example1 {
 		
 		// PRICE STREAMING
 		
-		// Open first price streaming
-		long id1 = wrapper.getPriceBegin(Arrays.asList("GBP_USD"), null, "tob", 1, new ArthikaHFTPriceListenerImp1());
+		// get tinterfaces
+		List<ArthikaHFT.tinterfaceTick> tinterfaceTickList = wrapper.getInterface();
+		
+		// Open first price streaming for one security in all tinterfaces
+		long id1 = wrapper.getPriceBegin(Arrays.asList("GBP_USD"), null, ArthikaHFT.GRANULARITY_TOB, 1, new ArthikaHFTPriceListenerImp1());
 		Thread.sleep(5000);
 		
-		// Open second price streaming
-		long id2 = wrapper.getPriceBegin(Arrays.asList("EUR_USD", "GBP_JPY"), Arrays.asList("Baxter_CNX", "Cantor_CNX_3"), "fab", 2, new ArthikaHFTPriceListenerImp1());
+		// Open second price streaming for two securities in the two first tinterfaces
+		List<String> tinterfacelist = null;
+		if (tinterfaceTickList!=null && tinterfaceTickList.size()>1){
+			tinterfacelist = new ArrayList<String>();
+			tinterfacelist.add(tinterfaceTickList.get(0).name);
+			tinterfacelist.add(tinterfaceTickList.get(1).name);
+		}
+		long id2 = wrapper.getPriceBegin(Arrays.asList("EUR_USD", "GBP_JPY"), tinterfacelist, ArthikaHFT.GRANULARITY_FAB, 2, new ArthikaHFTPriceListenerImp1());
 		Thread.sleep(5000);
 		
 		// Close second price streaming
@@ -147,8 +157,12 @@ public class Example1 {
 		wrapper.getPriceEnd(id1);
 		Thread.sleep(5000);
 		
-		// Open third price streaming
-		long id3 = wrapper.getPriceBegin(Arrays.asList("EUR_USD", "EUR_GBP", "EUR_JPY", "GBP_JPY", "GBP_USD", "USD_JPY"), Arrays.asList("Baxter_CNX", "Cantor_CNX_3"), "tob", 1, new ArthikaHFTPriceListenerImp1());
+		// Open third price streaming for six securities in the first tinterface
+		if (tinterfaceTickList!=null && !tinterfaceTickList.isEmpty()){
+			tinterfacelist = new ArrayList<String>();
+			tinterfacelist.add(tinterfaceTickList.get(0).name);
+		}
+		long id3 = wrapper.getPriceBegin(Arrays.asList("EUR_USD", "EUR_GBP", "EUR_JPY", "GBP_JPY", "GBP_USD", "USD_JPY"), tinterfacelist, ArthikaHFT.GRANULARITY_TOB, 1, new ArthikaHFTPriceListenerImp1());
 		Thread.sleep(5000);
 		
 		// Close third price streaming

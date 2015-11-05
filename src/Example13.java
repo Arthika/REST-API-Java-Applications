@@ -35,53 +35,64 @@ public class Example13 {
 		
 		// MULTIPLE ORDER CREATION
 		
+		// get tinterfaces
+		List<ArthikaHFT.tinterfaceTick> tinterfaceTickList = wrapper.getInterface();
+		String tinterface1 = tinterfaceTickList.get(0).name;
+		String tinterface2;
+		if (tinterfaceTickList.size()>1){
+			tinterface2 = tinterfaceTickList.get(1).name;
+		}
+		else{
+			tinterface2 = tinterfaceTickList.get(0).name;
+		}
+		
 		ArthikaHFT.orderRequest order1 = new ArthikaHFT.orderRequest();
 		order1.security = "EUR_USD";
-		order1.tinterface = "Cantor_CNX_3";
+		order1.tinterface = tinterface2;
 		order1.quantity = 1000000;
-		order1.side = "buy";
-		order1.type = "market";
-		order1.timeinforce = "day";
+		order1.side = ArthikaHFT.SIDE_BUY;
+		order1.type = ArthikaHFT.TYPE_MARKET;
+		order1.timeinforce = ArthikaHFT.VALIDITY_DAY;
 		
 		ArthikaHFT.orderRequest order2 = new ArthikaHFT.orderRequest();
 		order2.security = "EUR_USD";
-		order2.tinterface = "Baxter_CNX";
+		order2.tinterface = tinterface1;
 		order2.quantity = 1000000;
-		order2.side = "sell";
-		order2.type = "market";
-		order2.timeinforce = "day";
+		order2.side = ArthikaHFT.SIDE_SELL;
+		order2.type = ArthikaHFT.TYPE_MARKET;
+		order2.timeinforce = ArthikaHFT.VALIDITY_DAY;
 		
 		ArthikaHFT.orderRequest order3 = new ArthikaHFT.orderRequest();
 		order3.security = "EUR_USD";
-		order3.tinterface = "Cantor_CNX_3";
-		order3.quantity = 1000000;
-		order3.side = "buy";
-		order3.type = "market";
-		order3.timeinforce = "day";
+		order3.tinterface = tinterface2;
+		order3.quantity = 2000000;
+		order3.side = ArthikaHFT.SIDE_BUY;
+		order3.type = ArthikaHFT.TYPE_MARKET;
+		order3.timeinforce = ArthikaHFT.VALIDITY_DAY;
 		
 		ArthikaHFT.orderRequest order4 = new ArthikaHFT.orderRequest();
 		order4.security = "EUR_USD";
-		order4.tinterface = "Baxter_CNX";
-		order4.quantity = 1000000;
-		order4.side = "sell";
-		order4.type = "market";
-		order4.timeinforce = "day";
+		order4.tinterface = tinterface1;
+		order4.quantity = 2000000;
+		order4.side = ArthikaHFT.SIDE_SELL;
+		order4.type = ArthikaHFT.TYPE_MARKET;
+		order4.timeinforce = ArthikaHFT.VALIDITY_DAY;
 		
 		ArthikaHFT.orderRequest order5 = new ArthikaHFT.orderRequest();
 		order5.security = "EUR_USD";
-		order5.tinterface = "Cantor_CNX_3";
+		order5.tinterface = tinterface2;
 		order5.quantity = 1000000;
-		order5.side = "buy";
-		order5.type = "market";
-		order5.timeinforce = "day";
+		order5.side = ArthikaHFT.SIDE_BUY;
+		order5.type = ArthikaHFT.TYPE_MARKET;
+		order5.timeinforce = ArthikaHFT.VALIDITY_DAY;
 		
 		ArthikaHFT.orderRequest order6 = new ArthikaHFT.orderRequest();
 		order6.security = "EUR_USD";
-		order6.tinterface = "Baxter_CNX";
+		order6.tinterface = tinterface1;
 		order6.quantity = 1000000;
-		order6.side = "sell";
-		order6.type = "market";
-		order6.timeinforce = "day";
+		order6.side = ArthikaHFT.SIDE_SELL;
+		order6.type = ArthikaHFT.TYPE_MARKET;
+		order6.timeinforce = ArthikaHFT.VALIDITY_DAY;
 
 		System.out.println("Starting Polling1");
 		List<ArthikaHFT.orderTick> orderTickList1 = wrapper.getOrder(Arrays.asList("EUR_USD"), null, null);

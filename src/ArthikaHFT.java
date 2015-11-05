@@ -54,6 +54,23 @@ public class ArthikaHFT {
 	private String token = null;
 
 	private HashMap<ThreadExecution,myResponseHandler> threadmap;
+	
+	public static final String SIDE_BUY = "buy";
+	public static final String SIDE_SELL = "sell";
+	public static final String TYPE_MARKET = "market";
+	public static final String TYPE_LIMIT = "limit";
+	public static final String VALIDITY_DAY = "day";
+	public static final String VALIDITY_FILLORKILL = "fill or kill";
+	public static final String VALIDITY_INMEDIATEORCANCEL = "inmediate or cancel";
+	public static final String VALIDITY_GOODTILLCANCEL = "good till cancel";
+	public static final String GRANULARITY_TOB = "tob";
+	public static final String GRANULARITY_FAB = "fab";
+	
+	public static final String ORDERTYPE_PENDING = "pending";
+	public static final String ORDERTYPE_INDETERMINATED = "indetermined";
+	public static final String ORDERTYPE_EXECUTED = "executed";
+	public static final String ORDERTYPE_CANCELED = "canceled";
+	public static final String ORDERTYPE_REJECTED = "rejected";
 
 	public static class hftRequest {
 		public getAuthorizationChallengeRequest getAuthorizationChallenge;

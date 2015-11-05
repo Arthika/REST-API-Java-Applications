@@ -27,7 +27,7 @@ class ArthikaHFTPriceListenerImp3 implements ArthikaHFTPriceListener {
 	@Override
 	public void priceEvent(List<ArthikaHFT.priceTick> priceTickList) {
 		for (ArthikaHFT.priceTick tick : priceTickList){
-			System.out.println("Security: " + tick.security + " Price: " + tick.price + " Side: " + tick.side + " Liquidity: " + tick.liquidity);
+			System.out.println("Security: " + tick.security + " Price: " + String.format("%." + tick.pips + "f", tick.price) + " Side: " + tick.side + " TI: " + tick.tinterface + " Liquidity: " + tick.liquidity);
 		}
 	}
 	
@@ -130,23 +130,34 @@ public class Example3 {
 		wrapper.doAuthentication();
 		
 		// POSITION STREAMING
+		
+		// get tinterfaces
+		List<ArthikaHFT.tinterfaceTick> tinterfaceTickList = wrapper.getInterface();
 
+		String tinterface1 = tinterfaceTickList.get(0).name;
 		ArthikaHFT.orderRequest order1 = new ArthikaHFT.orderRequest();
 		order1.security = "EUR_USD";
-		order1.tinterface = "Baxter_CNX";
+		order1.tinterface = tinterface1;
 		order1.quantity = 400000;
-		order1.side = "sell";
-		order1.type = "market";
-		order1.timeinforce = "inmediate or cancel";
+		order1.side = ArthikaHFT.SIDE_SELL;
+		order1.type = ArthikaHFT.TYPE_LIMIT;
+		order1.timeinforce = ArthikaHFT.VALIDITY_DAY;
 		order1.price = 1.15548;
 		
+		String tinterface2;
+		if (tinterfaceTickList.size()>1){
+			tinterface2 = tinterfaceTickList.get(1).name;
+		}
+		else{
+			tinterface2 = tinterfaceTickList.get(0).name;
+		}
 		ArthikaHFT.orderRequest order2 = new ArthikaHFT.orderRequest();
 		order2.security = "GBP_USD";
-		order2.tinterface = "Cantor_CNX_3";
+		order2.tinterface = tinterface2;
 		order2.quantity = 500000;
-		order2.side = "buy";
-		order2.type = "market";
-		order2.timeinforce = "fill or kill";
+		order2.side = ArthikaHFT.SIDE_BUY;
+		order2.type = ArthikaHFT.TYPE_LIMIT;
+		order2.timeinforce = ArthikaHFT.VALIDITY_FILLORKILL;
 		order2.price = 1.67389;
 		
 		// Open position streaming

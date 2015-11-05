@@ -27,30 +27,30 @@ class ArthikaHFTPriceListenerImp12 implements ArthikaHFTPriceListener {
 	@Override
 	public void priceEvent(List<ArthikaHFT.priceTick> priceTickList) {
 		for (ArthikaHFT.priceTick tick : priceTickList){
-			System.out.println("Security: " + tick.security + " Price: " + tick.price + " Side: " + tick.side + " Liquidity: " + tick.liquidity + " TI: " + tick.tinterface);
+			System.out.println("Security: " + tick.security + " Price: " + String.format("%." + tick.pips + "f", tick.price) + " Side: " + tick.side + " TI: " + tick.tinterface + " Liquidity: " + tick.liquidity);
 			if (tick.side.equals("ask")){
-				if (tick.tinterface.equals("Cantor_CNX_3")){
+				if (tick.tinterface.equals(Example12.tinterface2)){
 					Example12.bestcanask = tick.price;
 					Example12.bestcanaskliquidity = tick.liquidity;
 				}
-				if (tick.tinterface.equals("Baxter_CNX")){
+				if (tick.tinterface.equals(Example12.tinterface1)){
 					Example12.bestbaxask = tick.price;
 					Example12.bestbaxaskliquidity = tick.liquidity;
 				}
 			
 			}
 			if (tick.side.equals("bid")){
-				if (tick.tinterface.equals("Cantor_CNX_3")){
+				if (tick.tinterface.equals(Example12.tinterface2)){
 					Example12.bestcanbid = tick.price;
 					Example12.bestcanbidliquidity = tick.liquidity;
 				}
-				if (tick.tinterface.equals("Baxter_CNX")){
+				if (tick.tinterface.equals(Example12.tinterface1)){
 					Example12.bestbaxbid = tick.price;
 					Example12.bestbaxbidliquidity = tick.liquidity;
 				}
-				Example12.checkPrices();
 			}
 		}
+		Example12.checkPrices();
 	}
 	
 	@Override
@@ -152,6 +152,9 @@ public class Example12 {
 	public static int bestbaxbidliquidity = 0;
 	public static String bestbaxbidti = "";
 	
+	public static String tinterface1 = "";
+	public static String tinterface2 = "";
+	
 	public Example12(){
 	}
 	
@@ -165,10 +168,20 @@ public class Example12 {
 		wrapper.doAuthentication();
 		
 		// STRATEGY
+		
+		// get tinterfaces
+		List<ArthikaHFT.tinterfaceTick> tinterfaceTickList = wrapper.getInterface();
+		tinterface1 = tinterfaceTickList.get(0).name;
+		if (tinterfaceTickList.size()>1){
+			tinterface2 = tinterfaceTickList.get(1).name;
+		}
+		else{
+			tinterface2 = tinterfaceTickList.get(0).name;
+		}
 
 		// Open price streaming
-		long id1 = wrapper.getPriceBegin(Arrays.asList("EUR_USD"), null, "tob", 1, new ArthikaHFTPriceListenerImp12());
-		Thread.sleep(10000);
+		long id1 = wrapper.getPriceBegin(Arrays.asList("EUR_USD"), null, ArthikaHFT.GRANULARITY_TOB, 1, new ArthikaHFTPriceListenerImp12());
+		Thread.sleep(20000);
 
 		// Close price streaming
 		wrapper.getPriceEnd(id1);
@@ -215,8 +228,8 @@ public class Example12 {
 				if (bestcanaskliquidity>bestbaxbidliquidity){
 					quantity = bestbaxbidliquidity;
 				}
-				orderask.tinterface = "Cantor_CNX_3";
-				orderbid.tinterface = "Baxter_CNX";
+				orderask.tinterface = tinterface2;
+				orderbid.tinterface = tinterface1;
 				orderask.price = bestcanask;
 				orderbid.price = bestbaxbid;
 			}
@@ -225,23 +238,23 @@ public class Example12 {
 				if (bestbaxaskliquidity>bestcanbidliquidity){
 					quantity = bestcanbidliquidity;
 				}
-				orderask.tinterface = "Baxter_CNX";
-				orderbid.tinterface = "Cantor_CNX_3";
+				orderask.tinterface = tinterface1;
+				orderbid.tinterface = tinterface2;
 				orderask.price = bestbaxask;
 				orderbid.price = bestcanbid;
 			}
 			
 			orderask.security = "EUR_USD";
 			orderask.quantity = quantity;
-			orderask.side = "buy";
-			orderask.type = "limit";
-			orderask.timeinforce = "fill or kill";
+			orderask.side = ArthikaHFT.SIDE_BUY;
+			orderask.type = ArthikaHFT.TYPE_LIMIT;
+			orderask.timeinforce = ArthikaHFT.VALIDITY_FILLORKILL;
 			
 			orderbid.security = "EUR_USD";
 			orderbid.quantity = quantity;
-			orderbid.side = "sell";
-			orderbid.type = "limit";
-			orderbid.timeinforce = "fill or kill";
+			orderbid.side = ArthikaHFT.SIDE_SELL;
+			orderbid.type = ArthikaHFT.TYPE_LIMIT;
+			orderbid.timeinforce = ArthikaHFT.VALIDITY_FILLORKILL;
 			
 			try{
 				List<ArthikaHFT.orderRequest> orderList1 = wrapper.setOrder(Arrays.asList(orderask, orderbid));
