@@ -1,6 +1,7 @@
 # REST API Java Applications
 This repository contains complete Application Examples using our REST API wrapper
 
+* Example0: GET ACCOUNTS AND TINTERFACES
 * Example1: PRICE STREAMING
 * Example2: PRICE POLLING
 * Example3: POSITION STREAMING
