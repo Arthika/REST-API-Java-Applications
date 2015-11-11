@@ -1,6 +1,11 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -127,6 +132,7 @@ class ArthikaHFTPriceListenerImp12 implements ArthikaHFTPriceListener {
 
 public class Example12 {
 	
+	private static final boolean ssl = true;
 	private static ArthikaHFT wrapper;
 	private static String domain;
 	private static String url_stream;
@@ -137,6 +143,8 @@ public class Example12 {
 	private static String password;
 	private static String authentication_port;
 	private static String request_port;
+	private static String ssl_cert;
+	private static int interval;
 	
 	public static double bestcanask = 0.0;
 	public static int bestcanaskliquidity = 0;
@@ -158,12 +166,12 @@ public class Example12 {
 	public Example12(){
 	}
 	
-	public static void main(String[] args) throws InterruptedException, IOException, DecoderException{
+	public static void main(String[] args) throws InterruptedException, IOException, DecoderException, KeyManagementException, CertificateException, NoSuchAlgorithmException, KeyStoreException{
 		
 		// get properties from file
     	getProperties();
 
-    	wrapper = new ArthikaHFT(domain, url_stream, url_polling, url_challenge, url_token, user, password, authentication_port, request_port);
+    	wrapper = new ArthikaHFT(domain, url_stream, url_polling, url_challenge, url_token, user, password, authentication_port, request_port, ssl, ssl_cert);
 		
 		wrapper.doAuthentication();
 		
@@ -178,9 +186,15 @@ public class Example12 {
 		else{
 			tinterface2 = tinterfaceTickList.get(0).name;
 		}
+		List<String> tinterfacelist = null;
+		if (tinterfaceTickList!=null && tinterfaceTickList.size()>1){
+			tinterfacelist = new ArrayList<String>();
+			tinterfacelist.add(tinterface1);
+			tinterfacelist.add(tinterface2);
+		}
 
 		// Open price streaming
-		long id1 = wrapper.getPriceBegin(Arrays.asList("EUR_USD"), null, ArthikaHFT.GRANULARITY_TOB, 1, new ArthikaHFTPriceListenerImp12());
+		long id1 = wrapper.getPriceBegin(Arrays.asList("EUR_USD"), tinterfacelist, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTPriceListenerImp12());
 		Thread.sleep(20000);
 
 		// Close price streaming
@@ -193,15 +207,24 @@ public class Example12 {
 		try {
 			input = new FileInputStream("config.properties");
 			prop.load(input);
-			domain = prop.getProperty("domain");
 			url_stream = prop.getProperty("url-stream");
 			url_polling = prop.getProperty("url-polling");
 			url_challenge = prop.getProperty("url-challenge");
 			url_token = prop.getProperty("url-token");
 			user = prop.getProperty("user");
 			password = prop.getProperty("password");
-			authentication_port = prop.getProperty("authentication-port");
-			request_port = prop.getProperty("request-port");
+			interval = Integer.parseInt(prop.getProperty("interval"));
+			if (ssl){
+				domain = prop.getProperty("ssl-domain");
+				authentication_port = prop.getProperty("ssl-authentication-port");
+				request_port = prop.getProperty("ssl-request-port");
+				ssl_cert = prop.getProperty("ssl-cert");
+			}
+			else{
+				domain = prop.getProperty("domain");
+				authentication_port = prop.getProperty("authentication-port");
+				request_port = prop.getProperty("request-port");
+			}
 		}
 		catch (IOException ex) {
 			ex.printStackTrace();
@@ -248,23 +271,21 @@ public class Example12 {
 			orderask.quantity = quantity;
 			orderask.side = ArthikaHFT.SIDE_BUY;
 			orderask.type = ArthikaHFT.TYPE_LIMIT;
-			orderask.timeinforce = ArthikaHFT.VALIDITY_FILLORKILL;
+			orderask.timeinforce = ArthikaHFT.VALIDITY_DAY;
 			
 			orderbid.security = "EUR_USD";
 			orderbid.quantity = quantity;
 			orderbid.side = ArthikaHFT.SIDE_SELL;
 			orderbid.type = ArthikaHFT.TYPE_LIMIT;
-			orderbid.timeinforce = ArthikaHFT.VALIDITY_FILLORKILL;
+			orderbid.timeinforce = ArthikaHFT.VALIDITY_DAY;
 			
 			try{
-				List<ArthikaHFT.orderRequest> orderList1 = wrapper.setOrder(Arrays.asList(orderask, orderbid));
+				List<ArthikaHFT.orderRequest> orderList1 = wrapper.setOrder(Arrays.asList(orderbid));
 				for (int i=0; i< orderList1.size(); i++){
 					ArthikaHFT.orderRequest orderresponse = orderList1.get(i);
 					System.out.println("Id: " + orderresponse.tempid + " Security: " + orderresponse.security + " Side: " + orderresponse.side + " Quantity: " + orderresponse.quantity + " Price: " + orderresponse.price + " Type: " + orderresponse.type);
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

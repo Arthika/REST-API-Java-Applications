@@ -1,6 +1,10 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -105,6 +109,7 @@ class ArthikaHFTPriceListenerImp5 implements ArthikaHFTPriceListener {
 
 public class Example5 {
 	
+	private static final boolean ssl = true;
 	private static ArthikaHFT wrapper;
 	private static String domain;
 	private static String url_stream;
@@ -115,17 +120,19 @@ public class Example5 {
 	private static String password;
 	private static String authentication_port;
 	private static String request_port;
+	private static String ssl_cert;
+	private static int interval;
 	
 	public Example5(){
 		
 	}
 	
-	public static void main(String[] args) throws IOException, InterruptedException, DecoderException{
+	public static void main(String[] args) throws IOException, InterruptedException, DecoderException, KeyManagementException, CertificateException, NoSuchAlgorithmException, KeyStoreException{
 		
 		// get properties from file
     	getProperties();
 
-    	wrapper = new ArthikaHFT(domain, url_stream, url_polling, url_challenge, url_token, user, password, authentication_port, request_port);
+    	wrapper = new ArthikaHFT(domain, url_stream, url_polling, url_challenge, url_token, user, password, authentication_port, request_port, ssl, ssl_cert);
 		
 		wrapper.doAuthentication();
 		
@@ -161,7 +168,7 @@ public class Example5 {
 		order2.price = 1.47389;
 
 		// Open order streaming
-		long id1 = wrapper.getOrderBegin(null, null, null, new ArthikaHFTPriceListenerImp5());
+		long id1 = wrapper.getOrderBegin(null, null, null, interval, new ArthikaHFTPriceListenerImp5());
 		Thread.sleep(2000);
 		
 		// Create two orders
@@ -182,15 +189,24 @@ public class Example5 {
 		try {
 			input = new FileInputStream("config.properties");
 			prop.load(input);
-			domain = prop.getProperty("domain");
 			url_stream = prop.getProperty("url-stream");
 			url_polling = prop.getProperty("url-polling");
 			url_challenge = prop.getProperty("url-challenge");
 			url_token = prop.getProperty("url-token");
 			user = prop.getProperty("user");
 			password = prop.getProperty("password");
-			authentication_port = prop.getProperty("authentication-port");
-			request_port = prop.getProperty("request-port");
+			interval = Integer.parseInt(prop.getProperty("interval"));
+			if (ssl){
+				domain = prop.getProperty("ssl-domain");
+				authentication_port = prop.getProperty("ssl-authentication-port");
+				request_port = prop.getProperty("ssl-request-port");
+				ssl_cert = prop.getProperty("ssl-cert");
+			}
+			else{
+				domain = prop.getProperty("domain");
+				authentication_port = prop.getProperty("authentication-port");
+				request_port = prop.getProperty("request-port");
+			}
 		}
 		catch (IOException ex) {
 			ex.printStackTrace();

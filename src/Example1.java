@@ -1,6 +1,10 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -106,6 +110,7 @@ class ArthikaHFTPriceListenerImp1 implements ArthikaHFTPriceListener {
 
 public class Example1 {
 	
+	private static final boolean ssl = true;
 	private static ArthikaHFT wrapper;
 	private static String domain;
 	private static String url_stream;
@@ -116,17 +121,19 @@ public class Example1 {
 	private static String password;
 	private static String authentication_port;
 	private static String request_port;
+	private static String ssl_cert;
+	private static int interval;
 	
 	public Example1(){
 		
 	}
 	
-	public static void main(String[] args) throws IOException, InterruptedException, DecoderException{
+	public static void main(String[] args) throws IOException, InterruptedException, DecoderException, KeyManagementException, CertificateException, NoSuchAlgorithmException, KeyStoreException{
 		
 		// get properties from file
     	getProperties();
 
-		wrapper = new ArthikaHFT(domain, url_stream, url_polling, url_challenge, url_token, user, password, authentication_port, request_port);
+		wrapper = new ArthikaHFT(domain, url_stream, url_polling, url_challenge, url_token, user, password, authentication_port, request_port, ssl, ssl_cert);
 		
 		wrapper.doAuthentication();
 		
@@ -136,7 +143,7 @@ public class Example1 {
 		List<ArthikaHFT.tinterfaceTick> tinterfaceTickList = wrapper.getInterface();
 		
 		// Open first price streaming for one security in all tinterfaces
-		long id1 = wrapper.getPriceBegin(Arrays.asList("GBP_USD"), null, ArthikaHFT.GRANULARITY_TOB, 1, new ArthikaHFTPriceListenerImp1());
+		long id1 = wrapper.getPriceBegin(Arrays.asList("GBP_USD"), null, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTPriceListenerImp1());
 		Thread.sleep(5000);
 		
 		// Open second price streaming for two securities in the two first tinterfaces
@@ -146,7 +153,7 @@ public class Example1 {
 			tinterfacelist.add(tinterfaceTickList.get(0).name);
 			tinterfacelist.add(tinterfaceTickList.get(1).name);
 		}
-		long id2 = wrapper.getPriceBegin(Arrays.asList("EUR_USD", "GBP_JPY"), tinterfacelist, ArthikaHFT.GRANULARITY_FAB, 2, new ArthikaHFTPriceListenerImp1());
+		long id2 = wrapper.getPriceBegin(Arrays.asList("EUR_USD", "GBP_JPY"), tinterfacelist, ArthikaHFT.GRANULARITY_FAB, 2, interval, new ArthikaHFTPriceListenerImp1());
 		Thread.sleep(5000);
 		
 		// Close second price streaming
@@ -162,7 +169,7 @@ public class Example1 {
 			tinterfacelist = new ArrayList<String>();
 			tinterfacelist.add(tinterfaceTickList.get(0).name);
 		}
-		long id3 = wrapper.getPriceBegin(Arrays.asList("EUR_USD", "EUR_GBP", "EUR_JPY", "GBP_JPY", "GBP_USD", "USD_JPY"), tinterfacelist, ArthikaHFT.GRANULARITY_TOB, 1, new ArthikaHFTPriceListenerImp1());
+		long id3 = wrapper.getPriceBegin(Arrays.asList("EUR_USD", "EUR_GBP", "EUR_JPY", "GBP_JPY", "GBP_USD", "USD_JPY"), tinterfacelist, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTPriceListenerImp1());
 		Thread.sleep(5000);
 		
 		// Close third price streaming
@@ -175,15 +182,24 @@ public class Example1 {
 		try {
 			input = new FileInputStream("config.properties");
 			prop.load(input);
-			domain = prop.getProperty("domain");
 			url_stream = prop.getProperty("url-stream");
 			url_polling = prop.getProperty("url-polling");
 			url_challenge = prop.getProperty("url-challenge");
 			url_token = prop.getProperty("url-token");
 			user = prop.getProperty("user");
 			password = prop.getProperty("password");
-			authentication_port = prop.getProperty("authentication-port");
-			request_port = prop.getProperty("request-port");
+			interval = Integer.parseInt(prop.getProperty("interval"));
+			if (ssl){
+				domain = prop.getProperty("ssl-domain");
+				authentication_port = prop.getProperty("ssl-authentication-port");
+				request_port = prop.getProperty("ssl-request-port");
+				ssl_cert = prop.getProperty("ssl-cert");
+			}
+			else{
+				domain = prop.getProperty("domain");
+				authentication_port = prop.getProperty("authentication-port");
+				request_port = prop.getProperty("request-port");
+			}
 		}
 		catch (IOException ex) {
 			ex.printStackTrace();
