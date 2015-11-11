@@ -41,7 +41,7 @@ From here on we will assume it is Example1.java.
 long id1 = wrapper.getPriceBegin(Arrays.asList("GBP_USD"), null, "tob", 1, new ArthikaHFTPriceListenerImp1());
 ```
 
-In case you want disable ssl protocol, change the following line 
+In case you want to disable ssl protocol, change the following line:
 ```
 private static final boolean ssl = true;
 ```
