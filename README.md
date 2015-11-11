@@ -41,6 +41,11 @@ From here on we will assume it is Example1.java.
 long id1 = wrapper.getPriceBegin(Arrays.asList("GBP_USD"), null, "tob", 1, new ArthikaHFTPriceListenerImp1());
 ```
 
+In case you want disable ssl protocol, change the following line 
+```
+private static final boolean ssl = true;
+```
+
 **4. Run the examples using the '.sh' script such as this one:**
 ```javascript
 $ export JARS=lib/commons-codec-1.9.jar:lib/commons-logging-1.2.jar:lib/fluent-hc-4.5.jar:lib/httpclient-4.5.jar:lib/httpclient-cache-4.5.jar:lib/httpclient-win-4.5.jar:lib/httpcore-4.4.1.jar:lib/httpmime-4.5.jar:lib/jackson-all-1.9.9.jar:lib/jna-4.1.0.jar:lib/jna-platform-4.1.0.jar
