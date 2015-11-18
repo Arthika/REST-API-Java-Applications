@@ -67,6 +67,7 @@ public class ArthikaHFT {
 	private String ssl_cert;
 	private String challenge;
 	private String token = null;
+	private SSLContext sslContext = null;
 
 	private HashMap<ThreadExecution,myResponseHandler> threadmap;
 	
@@ -348,6 +349,7 @@ public class ArthikaHFT {
 		public String  asset;
 		public double  exposure;
         public double  totalrisk;
+        public double  pl;
 	}
 	
 	public static class securityPositionTick {
@@ -359,6 +361,7 @@ public class ArthikaHFT {
 		public int     pips;
 		public double  equity;
 		public double  freemargin;
+		public double  pl;
 	}
 	
 	public static class accountingTick {
@@ -366,6 +369,7 @@ public class ArthikaHFT {
         public double  totalequity;
         public double  usedmargin;
         public double  freemargin;
+        public String  m2mcurrency;
     }
 	
 	public static class positionHeartbeat {
@@ -737,7 +741,7 @@ public class ArthikaHFT {
 	    	ks.load(null); // You don't need the KeyStore instance to come from a file.
 	    	ks.setCertificateEntry("cert", cert);
 	    	tmf.init(ks);
-	   		SSLContext sslContext = SSLContext.getInstance("TLS");
+	   		sslContext = SSLContext.getInstance("TLS");
 	    	sslContext.init(null, tmf.getTrustManagers(), null);
 	    	client = HttpClients.custom().setSSLContext(sslContext).setDefaultHeaders(headers).build();
 		}
@@ -903,21 +907,6 @@ public class ArthikaHFT {
 		headers.add(new BasicHeader(HttpHeaders.ACCEPT, "application/json"));
 		CloseableHttpClient client=null;
 		if (ssl){
-			// get certificate
-	    	CertificateFactory cf = CertificateFactory.getInstance("X.509");
-	    	URL url = new URL(ssl_cert);
-	    	URLConnection connection = url.openConnection();
-	    	InputStream in = connection.getInputStream();
-	    	Certificate cert = cf.generateCertificate(in);
-	    	//System.out.println("Cert:\n===================\n" + cert.getPublicKey().toString() + "\n");
-	    	in.close();
-	    	TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-	    	KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-	    	ks.load(null); // You don't need the KeyStore instance to come from a file.
-	    	ks.setCertificateEntry("cert", cert);
-	    	tmf.init(ks);
-	   		SSLContext sslContext = SSLContext.getInstance("TLS");
-	    	sslContext.init(null, tmf.getTrustManagers(), null);
 	    	client = HttpClients.custom().setSSLContext(sslContext).setDefaultHeaders(headers).build();
 		}
 		else{
