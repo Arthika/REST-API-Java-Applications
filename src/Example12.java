@@ -280,7 +280,7 @@ public class Example12 {
 			orderbid.timeinforce = ArthikaHFT.VALIDITY_DAY;
 			
 			try{
-				List<ArthikaHFT.orderRequest> orderList1 = wrapper.setOrder(Arrays.asList(orderbid));
+				List<ArthikaHFT.orderRequest> orderList1 = wrapper.setOrder(Arrays.asList(orderask, orderbid));
 				for (int i=0; i< orderList1.size(); i++){
 					ArthikaHFT.orderRequest orderresponse = orderList1.get(i);
 					System.out.println("Id: " + orderresponse.tempid + " Security: " + orderresponse.security + " Side: " + orderresponse.side + " Quantity: " + orderresponse.quantity + " Price: " + orderresponse.price + " Type: " + orderresponse.type);

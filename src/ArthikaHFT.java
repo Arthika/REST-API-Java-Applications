@@ -73,6 +73,8 @@ public class ArthikaHFT {
 	
 	public static final String SIDE_BUY = "buy";
 	public static final String SIDE_SELL = "sell";
+	public static final String SIDE_ASK = "ask";
+    public static final String SIDE_BID = "bid";
 	public static final String TYPE_MARKET = "market";
 	public static final String TYPE_LIMIT = "limit";
 	public static final String VALIDITY_DAY = "day";
@@ -87,6 +89,18 @@ public class ArthikaHFT {
 	public static final String ORDERTYPE_EXECUTED = "executed";
 	public static final String ORDERTYPE_CANCELED = "canceled";
 	public static final String ORDERTYPE_REJECTED = "rejected";
+	
+	public static final String CANDLE_GRANULARITY_1SECOND = "S1";
+	public static final String CANDLE_GRANULARITY_5SECONDS = "S5";
+	public static final String CANDLE_GRANULARITY_10SECONDS = "S10";
+	public static final String CANDLE_GRANULARITY_30SECONDS = "S30";
+	public static final String CANDLE_GRANULARITY_1MINUTE = "M1";
+	public static final String CANDLE_GRANULARITY_5MINUTES = "M5";
+	public static final String CANDLE_GRANULARITY_10MINUTES = "M10";
+	public static final String CANDLE_GRANULARITY_30MINUTES = "M30";
+	public static final String CANDLE_GRANULARITY_1HOUR = "H1";
+	public static final String CANDLE_GRANULARITY_2HOURS = "H2";
+	public static final String CANDLE_GRANULARITY_6HOURS = "H6";
 
 	public static class hftRequest {
 		public getAuthorizationChallengeRequest getAuthorizationChallenge;
@@ -99,6 +113,7 @@ public class ArthikaHFT {
 		public setOrderRequest     setOrder;
 		public cancelOrderRequest  cancelOrder;
         public modifyOrderRequest  modifyOrder;
+        public getHistoricalPriceRequest  getHistoricalPrice;
 
 		private hftRequest() {
 		}
@@ -115,6 +130,7 @@ public class ArthikaHFT {
 		public setOrderResponse    setOrderResponse;
 		public cancelOrderResponse cancelOrderResponse;
         public modifyOrderResponse modifyOrderResponse;
+        public getHistoricalPriceResponse getHistoricalPriceResponse;
         
 	}
 	
@@ -314,6 +330,34 @@ public class ArthikaHFT {
         public String           timestamp;
     }
     
+    public static class getHistoricalPriceRequest {
+        public String        user;
+        public String        token;
+        public List<String>  security;
+        public List<String>  tinterface;
+        public String        granularity;
+        public String        side;
+        public int           number;
+		
+        
+        public getHistoricalPriceRequest( String user, String token, List<String> security, List<String> tinterface, String granularity, String side, int number ) {
+        	this.user = user;
+        	this.token = token;
+        	this.security = security;
+        	this.tinterface = tinterface;
+        	this.granularity = granularity;
+			this.side = side;
+			this.number = number;
+        }
+    }
+    
+    public static class getHistoricalPriceResponse {
+        public int              result;
+        public String           message;
+        public List<candleTick> candle;
+        public String           timestamp;
+    }
+    
     public static class accountTick {
         public String        name;
         public String        description;
@@ -445,6 +489,18 @@ public class ArthikaHFT {
         public String  fixid;
         public String  result;
     }
+    
+    public static class candleTick {
+        public String  security;
+        public String  tinterface;
+        public int     timestamp;
+        public String  side;
+        public double  open;
+        public double  high;
+        public double  low;
+        public double  close;
+        public int     ticks;
+    }
 	
 	public class myResponseHandler implements ResponseHandler<String>{
 		
@@ -460,6 +516,7 @@ public class ArthikaHFT {
 		private List<orderTick> orderTickList = new ArrayList<orderTick>();
 		private List<cancelTick> cancelTickList = new ArrayList<cancelTick>();
         private List<modifyTick> modifyTickList = new ArrayList<modifyTick>();
+        private List<candleTick> candleTickList = new ArrayList<candleTick>();
 		public ArthikaHFTPriceListener listener;
 		
 		public void setObjectMapper(ObjectMapper mapper){
@@ -508,6 +565,10 @@ public class ArthikaHFT {
 
         public List<modifyTick> getModifyList() {
             return modifyTickList;
+        }
+        
+        public List<candleTick> getCandleList() {
+            return candleTickList;
         }
 
 		public void setStream(boolean stream){
@@ -674,6 +735,17 @@ public class ArthikaHFT {
                                 //listener.messageEvent(response.modifyOrderResponse.message);
                             }
                         }
+                        if (response.getHistoricalPriceResponse != null){
+                    		if (response.getHistoricalPriceResponse.candle != null){
+                                for (candleTick tick : response.getHistoricalPriceResponse.candle){
+                                	//System.out.println("Security: " + tick.security + " tinterface: " + tick.tinterface +  " TimeStamp: " + tick.timestamp +  " Side: " + tick.side + " Open: " + tick.open + " High: " + tick.high + " Low: " + tick.low + " Close: " + tick.close + " Ticks: " + tick.ticks);
+                                	candleTickList.add(tick);
+                                }
+                            }
+                            if (response.getHistoricalPriceResponse.message != null){
+								//listener.messageEvent(response.getHistoricalPriceResponse.message);
+							}
+                    	}
 					}
 				}
 				catch (IOException e) {
@@ -894,6 +966,14 @@ public class ArthikaHFT {
         myResponseHandler responseHandler = new myResponseHandler();
         sendRequest(hftrequest, responseHandler, "/modifyOrder", false, null);
         return responseHandler.getModifyList();
+    }
+    
+    public List<candleTick> getHistoricalPrice(List<String> securities, List<String> tinterfaces, String granularity, String side, int number) throws IOException, InterruptedException, KeyManagementException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
+        hftRequest hftrequest = new hftRequest();
+        hftrequest.getHistoricalPrice = new getHistoricalPriceRequest(user, token, securities, tinterfaces, granularity, side, number);
+        myResponseHandler responseHandler = new myResponseHandler();
+        sendRequest(hftrequest, responseHandler, "/getHistoricalPrice", false, null);
+        return responseHandler.getCandleList();
     }
 	
 	private long sendRequest(hftRequest hftrequest, myResponseHandler responseHandler, String urlpath, boolean stream, ArthikaHFTPriceListener listener) throws IOException, InterruptedException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {

@@ -15,6 +15,7 @@ This repository contains complete Application Examples using our REST API wrappe
 * Example11: MODIFY PENDING ORDER WITH ORDER STREAMING
 * Example12: STRATEGY
 * Example13: MULTIPLE ORDER CREATION
+* Example14: GET HISTORICAL PRICE
 
 ### Pre-requisites:
 Will users need previous registration, account, strategy set-up...? After all, these examples require a pre-existing strategy
