@@ -712,7 +712,9 @@ public class ArthikaHFT {
 								//listener.timestampEvent(response.setOrderResponse.timestamp);
 							}
 							if (response.setOrderResponse.order != null){
-								this.orderList = response.setOrderResponse.order;
+								for (orderRequest tick : response.setOrderResponse.order){
+									orderList.add(tick);
+								}
 							}
 							if (response.setOrderResponse.message != null){
 								//listener.messageEvent(response.setOrderResponse.message);
@@ -723,7 +725,9 @@ public class ArthikaHFT {
                                 //listener.timestampEvent(response.cancelOrderResponse.timestamp);
                             }
                             if (response.cancelOrderResponse.order != null){
-                                this.cancelTickList = response.cancelOrderResponse.order;
+                            	for (cancelTick tick : response.cancelOrderResponse.order){
+									cancelTickList.add(tick);
+								}
                             }
                             if (response.cancelOrderResponse.message != null){
                                 //listener.messageEvent(response.cancelOrderResponse.message);
@@ -734,7 +738,9 @@ public class ArthikaHFT {
                                 //listener.timestampEvent(response.modifyOrderResponse.timestamp);
                             }
                             if (response.modifyOrderResponse.order != null){
-                                this.modifyTickList = response.modifyOrderResponse.order;
+                            	for (modifyTick tick : response.modifyOrderResponse.order){
+									modifyTickList.add(tick);
+								}
                             }
                             if (response.modifyOrderResponse.message != null){
                                 //listener.messageEvent(response.modifyOrderResponse.message);
