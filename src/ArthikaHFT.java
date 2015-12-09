@@ -272,7 +272,6 @@ public class ArthikaHFT {
 		public List<orderTick>  order;
 		public orderHeartbeat   heartbeat;
 		public String           timestamp;
-		
 	}
 	
 	public static class setOrderRequest {
@@ -653,6 +652,9 @@ public class ArthikaHFT {
 								if (response.getPositionResponse.timestamp != null){
 									listener.timestampEvent(response.getPositionResponse.timestamp);
 								}
+								if (response.getPositionResponse.accounting!= null){
+                                    listener.accountingEvent(response.getPositionResponse.accounting);
+                                }
 								if (response.getPositionResponse.assetposition!= null){
 									listener.assetPositionEvent(response.getPositionResponse.assetposition);
 								}
@@ -667,6 +669,9 @@ public class ArthikaHFT {
 								}
 							}
 							else{
+								if (response.getPositionResponse.accounting != null){
+                                    accountingTick = response.getPositionResponse.accounting;
+                                }
 								if (response.getPositionResponse.assetposition != null){
 									for (assetPositionTick tick : response.getPositionResponse.assetposition){
 										assetPositionTickList.add(tick);
@@ -1022,16 +1027,18 @@ public class ArthikaHFT {
 	private boolean finishStreaming(long threadid) throws IOException {
 		System.out.println("Ending " + threadid);
 		ThreadExecution thread = null;
+		boolean found = false;
 		synchronized(threadmap){
 			Iterator<ThreadExecution> it = threadmap.keySet().iterator();
 			while (it.hasNext()){
 				thread = it.next();
 				if (thread.getId()==threadid){
+					found = true;
 					break;
 				}
 			}
 		}
-		if (thread==null){
+		if (!found){
 			return false;
 		}
 		thread.stopExecution();
