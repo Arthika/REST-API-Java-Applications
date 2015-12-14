@@ -69,8 +69,7 @@ public class Example7 {
 		
 		System.out.println("Sending order");
 		List<ArthikaHFT.orderRequest> orderList = wrapper.setOrder(Arrays.asList(order1));
-		for (int i=0; i< orderList.size(); i++){
-			ArthikaHFT.orderRequest orderresponse = orderList.get(i);
+		for (ArthikaHFT.orderRequest orderresponse : orderList){
 			System.out.println("Id: " + orderresponse.tempid + " Security: " + orderresponse.security + " Side: " + orderresponse.side + " Quantity: " + orderresponse.quantity + " Price: " + orderresponse.price + " Type: " + orderresponse.type);
 		}
 		System.out.println("Order sended");

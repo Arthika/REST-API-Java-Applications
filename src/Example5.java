@@ -11,7 +11,7 @@ import java.util.Properties;
 
 import org.apache.commons.codec.DecoderException;
 
-class ArthikaHFTPriceListenerImp5 implements ArthikaHFTPriceListener {
+class ArthikaHFTListenerImp5 implements ArthikaHFTListener {
 
 	@Override
 	public void timestampEvent(String timestamp) {
@@ -168,13 +168,12 @@ public class Example5 {
 		order2.price = 1.47389;
 
 		// Open order streaming
-		long id1 = wrapper.getOrderBegin(null, null, null, interval, new ArthikaHFTPriceListenerImp5());
+		long id1 = wrapper.getOrderBegin(null, null, null, interval, new ArthikaHFTListenerImp5());
 		Thread.sleep(2000);
 		
 		// Create two orders
 		List<ArthikaHFT.orderRequest> orderList = wrapper.setOrder(Arrays.asList(order1, order2));
-		for (int i=0; i< orderList.size(); i++){
-			ArthikaHFT.orderRequest orderresponse = orderList.get(i);
+		for (ArthikaHFT.orderRequest orderresponse : orderList){
 			System.out.println("Id: " + orderresponse.tempid + " Security: " + orderresponse.security + " Side: " + orderresponse.side + " Quantity: " + orderresponse.quantity + " Price: " + orderresponse.price + " Type: " + orderresponse.type);
 		}
 		Thread.sleep(5000);

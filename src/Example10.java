@@ -13,7 +13,7 @@ import java.util.Properties;
 
 import org.apache.commons.codec.DecoderException;
 
-class ArthikaHFTPriceListenerImp10 implements ArthikaHFTPriceListener {
+class ArthikaHFTListenerImp10 implements ArthikaHFTListener {
 	
 	public Map<Integer, String> fixidMap = new HashMap<Integer, String>();
 
@@ -145,14 +145,22 @@ public class Example10 {
 		
 		// get tinterfaces
 		List<ArthikaHFT.tinterfaceTick> tinterfaceTickList = wrapper.getInterface();
+		String tinterface1 = tinterfaceTickList.get(0).name;
 
 		// Open order streaming
-		ArthikaHFTPriceListenerImp10 listener = new ArthikaHFTPriceListenerImp10();
+		ArthikaHFTListenerImp10 listener = new ArthikaHFTListenerImp10();
 		long id1 = wrapper.getOrderBegin(null, null, null, interval, listener);
 		Thread.sleep(5000);
 		
+		// get current price
+        double price = 0.0;
+        List<ArthikaHFT.priceTick> priceTickList1 = wrapper.getPrice(Arrays.asList("EUR_USD"), Arrays.asList(tinterface1), ArthikaHFT.GRANULARITY_TOB, 1);
+        for (ArthikaHFT.priceTick tick : priceTickList1)
+        {
+            price = tick.price;
+        }
+		
 		// Create pending order. If buy, order price must be lower than current price
-		String tinterface1 = tinterfaceTickList.get(0).name;
 		ArthikaHFT.orderRequest order1 = new ArthikaHFT.orderRequest();
 		order1.security = "EUR_USD";
 		order1.tinterface = tinterface1;
@@ -160,11 +168,10 @@ public class Example10 {
 		order1.side = ArthikaHFT.SIDE_BUY;
 		order1.type = ArthikaHFT.TYPE_LIMIT;
 		order1.timeinforce = ArthikaHFT.VALIDITY_DAY;
-		order1.price = 1.00548;
+		order1.price = price - 0.01;
 		List<ArthikaHFT.orderRequest> orderList = wrapper.setOrder(Arrays.asList(order1));
 		int tempid = -1;
-		for (int i=0; i< orderList.size(); i++){
-			ArthikaHFT.orderRequest orderresponse = orderList.get(i);
+		for (ArthikaHFT.orderRequest orderresponse : orderList){
 			System.out.println("Id: " + orderresponse.tempid + " Security: " + orderresponse.security + " Side: " + orderresponse.side + " Quantity: " + orderresponse.quantity + " Price: " + orderresponse.price + " Type: " + orderresponse.type);
 			tempid = orderresponse.tempid;
 		}
@@ -174,8 +181,7 @@ public class Example10 {
 		System.out.println("Cancel order");
 		String fixid = listener.fixidMap.get(tempid);
 		List<ArthikaHFT.cancelTick> cancelList = wrapper.cancelOrder(Arrays.asList(fixid));
-		for (int i=0; i< cancelList.size(); i++){
-			ArthikaHFT.cancelTick cancelresponse = cancelList.get(i);
+		for (ArthikaHFT.cancelTick cancelresponse : cancelList){
 			System.out.println("FixId: " + cancelresponse.fixid + " Result: " + cancelresponse.result);
 		}
 		System.out.println("Order canceled");

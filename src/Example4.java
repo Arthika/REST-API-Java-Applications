@@ -46,12 +46,12 @@ public class Example4 {
 		List<ArthikaHFT.accountTick> accountTickList = wrapper.getAccount();
 
 		System.out.println("Starting Polling1");
-		ArthikaHFT.positionTick priceTickList1 = wrapper.getPosition(null, Arrays.asList("EUR_USD", "GBP_JPY", "GBP_USD"), null);
-		System.out.println("StrategyPL: " + priceTickList1.accountingTick.strategyPL + " TotalEquity: " + priceTickList1.accountingTick.totalequity + " UsedMargin: " + priceTickList1.accountingTick.usedmargin + " FreeMargin: " + priceTickList1.accountingTick.freemargin);
-		for (ArthikaHFT.assetPositionTick tick : priceTickList1.assetPositionTickList){
+		ArthikaHFT.positionTick positionTickList1 = wrapper.getPosition(null, Arrays.asList("EUR_USD", "GBP_JPY", "GBP_USD"), null);
+		System.out.println("StrategyPL: " + positionTickList1.accountingTick.strategyPL + " TotalEquity: " + positionTickList1.accountingTick.totalequity + " UsedMargin: " + positionTickList1.accountingTick.usedmargin + " FreeMargin: " + positionTickList1.accountingTick.freemargin);
+		for (ArthikaHFT.assetPositionTick tick : positionTickList1.assetPositionTickList){
 			System.out.println("Asset: " + tick.asset + " Account: " + tick.account + " Exposure: " + tick.exposure + " TotalRisk: " + tick.totalrisk);
 		}
-		for (ArthikaHFT.securityPositionTick tick : priceTickList1.securityPositionTickList){
+		for (ArthikaHFT.securityPositionTick tick : positionTickList1.securityPositionTickList){
 			System.out.println("Security: " + tick.security + " Account: " + tick.account + " Equity: " + tick.equity + " Exposure: " + tick.exposure + " Price: " + tick.price + " Pips: " + tick.pips);
 		}
 		System.out.println("Polling1 Finished");
@@ -63,12 +63,12 @@ public class Example4 {
 			accountlist.add(accountTickList.get(0).name);
 			accountlist.add(accountTickList.get(1).name);
 		}
-		ArthikaHFT.positionTick priceTickList2 = wrapper.getPosition(Arrays.asList("EUR", "GBP", "JPY", "USD"), null, accountlist);
-		System.out.println("StrategyPL: " + priceTickList1.accountingTick.strategyPL + " TotalEquity: " + priceTickList1.accountingTick.totalequity + " UsedMargin: " + priceTickList1.accountingTick.usedmargin + " FreeMargin: " + priceTickList1.accountingTick.freemargin);
-		for (ArthikaHFT.assetPositionTick tick : priceTickList2.assetPositionTickList){
+		ArthikaHFT.positionTick positionTickList2 = wrapper.getPosition(Arrays.asList("EUR", "GBP", "JPY", "USD"), null, accountlist);
+		System.out.println("StrategyPL: " + positionTickList2.accountingTick.strategyPL + " TotalEquity: " + positionTickList2.accountingTick.totalequity + " UsedMargin: " + positionTickList2.accountingTick.usedmargin + " FreeMargin: " + positionTickList2.accountingTick.freemargin);
+		for (ArthikaHFT.assetPositionTick tick : positionTickList2.assetPositionTickList){
 			System.out.println("Asset: " + tick.asset + " Account: " + tick.account + " Exposure: " + tick.exposure + " TotalRisk: " + tick.totalrisk);
 		}
-		for (ArthikaHFT.securityPositionTick tick : priceTickList2.securityPositionTickList){
+		for (ArthikaHFT.securityPositionTick tick : positionTickList2.securityPositionTickList){
 			System.out.println("Security: " + tick.security + " Account: " + tick.account + " Equity: " + tick.equity + " Exposure: " + tick.exposure + " Price: " + tick.price + " Pips: " + tick.pips);
 		}
 		System.out.println("Polling2 Finished");

@@ -12,7 +12,7 @@ import java.util.Properties;
 
 import org.apache.commons.codec.DecoderException;
 
-class ArthikaHFTPriceListenerImp1 implements ArthikaHFTPriceListener {
+class ArthikaHFTListenerImp1 implements ArthikaHFTListener {
 
 	@Override
 	public void timestampEvent(String timestamp) {
@@ -143,7 +143,7 @@ public class Example1 {
 		List<ArthikaHFT.tinterfaceTick> tinterfaceTickList = wrapper.getInterface();
 		
 		// Open first price streaming for one security in all tinterfaces
-		long id1 = wrapper.getPriceBegin(Arrays.asList("GBP_USD"), null, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTPriceListenerImp1());
+		long id1 = wrapper.getPriceBegin(Arrays.asList("GBP_USD"), null, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTListenerImp1());
 		Thread.sleep(5000);
 		
 		// Open second price streaming for two securities in the two first tinterfaces
@@ -153,7 +153,7 @@ public class Example1 {
 			tinterfacelist.add(tinterfaceTickList.get(0).name);
 			tinterfacelist.add(tinterfaceTickList.get(1).name);
 		}
-		long id2 = wrapper.getPriceBegin(Arrays.asList("EUR_USD", "GBP_JPY"), tinterfacelist, ArthikaHFT.GRANULARITY_FAB, 2, interval, new ArthikaHFTPriceListenerImp1());
+		long id2 = wrapper.getPriceBegin(Arrays.asList("EUR_USD", "GBP_JPY"), tinterfacelist, ArthikaHFT.GRANULARITY_FAB, 2, interval, new ArthikaHFTListenerImp1());
 		Thread.sleep(5000);
 		
 		// Close second price streaming
@@ -169,7 +169,7 @@ public class Example1 {
 			tinterfacelist = new ArrayList<String>();
 			tinterfacelist.add(tinterfaceTickList.get(0).name);
 		}
-		long id3 = wrapper.getPriceBegin(Arrays.asList("EUR_USD", "EUR_GBP", "EUR_JPY", "GBP_JPY", "GBP_USD", "USD_JPY"), tinterfacelist, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTPriceListenerImp1());
+		long id3 = wrapper.getPriceBegin(Arrays.asList("EUR_USD", "EUR_GBP", "EUR_JPY", "GBP_JPY", "GBP_USD", "USD_JPY"), tinterfacelist, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTListenerImp1());
 		Thread.sleep(5000);
 		
 		// Close third price streaming

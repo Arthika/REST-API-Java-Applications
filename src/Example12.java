@@ -12,7 +12,7 @@ import java.util.Properties;
 
 import org.apache.commons.codec.DecoderException;
 
-class ArthikaHFTPriceListenerImp12 implements ArthikaHFTPriceListener {
+class ArthikaHFTListenerImp12 implements ArthikaHFTListener {
 
 	@Override
 	public void timestampEvent(String timestamp) {
@@ -194,7 +194,7 @@ public class Example12 {
 		}
 
 		// Open price streaming
-		long id1 = wrapper.getPriceBegin(Arrays.asList("EUR_USD"), tinterfacelist, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTPriceListenerImp12());
+		long id1 = wrapper.getPriceBegin(Arrays.asList("EUR_USD"), tinterfacelist, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTListenerImp12());
 		Thread.sleep(20000);
 
 		// Close price streaming
@@ -281,8 +281,7 @@ public class Example12 {
 			
 			try{
 				List<ArthikaHFT.orderRequest> orderList1 = wrapper.setOrder(Arrays.asList(orderask, orderbid));
-				for (int i=0; i< orderList1.size(); i++){
-					ArthikaHFT.orderRequest orderresponse = orderList1.get(i);
+				for (ArthikaHFT.orderRequest orderresponse : orderList1){
 					System.out.println("Id: " + orderresponse.tempid + " Security: " + orderresponse.security + " Side: " + orderresponse.side + " Quantity: " + orderresponse.quantity + " Price: " + orderresponse.price + " Type: " + orderresponse.type);
 				}
 			} catch (Exception e) {

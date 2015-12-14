@@ -110,18 +110,15 @@ public class Example13 {
 		
 		System.out.println("Sending order");
 		List<ArthikaHFT.orderRequest> orderList1 = wrapper.setOrder(Arrays.asList(order1, order2, order3, order4, order5, order6, order1, order2, order3, order4, order5, order6, order1, order2, order3, order4, order5, order6));
-		for (int i=0; i< orderList1.size(); i++){
-			ArthikaHFT.orderRequest orderresponse = orderList1.get(i);
+		for (ArthikaHFT.orderRequest orderresponse : orderList1){
 			System.out.println("Id: " + orderresponse.tempid + " Security: " + orderresponse.security + " Side: " + orderresponse.side + " Quantity: " + orderresponse.quantity + " Price: " + orderresponse.price + " Type: " + orderresponse.type);
 		}
 		List<ArthikaHFT.orderRequest> orderList2 = wrapper.setOrder(Arrays.asList(order1, order2, order3, order4, order5, order6, order1, order2, order3, order4, order5, order6, order1, order2, order3, order4, order5, order6));
-		for (int i=0; i< orderList2.size(); i++){
-			ArthikaHFT.orderRequest orderresponse = orderList2.get(i);
+		for (ArthikaHFT.orderRequest orderresponse : orderList2){
 			System.out.println("Id: " + orderresponse.tempid + " Security: " + orderresponse.security + " Side: " + orderresponse.side + " Quantity: " + orderresponse.quantity + " Price: " + orderresponse.price + " Type: " + orderresponse.type);
 		}
 		List<ArthikaHFT.orderRequest> orderList3 = wrapper.setOrder(Arrays.asList(order1, order2, order3, order4, order5, order6, order1, order2, order3, order4, order5, order6, order1, order2, order3, order4, order5, order6));
-		for (int i=0; i< orderList3.size(); i++){
-			ArthikaHFT.orderRequest orderresponse = orderList3.get(i);
+		for (ArthikaHFT.orderRequest orderresponse : orderList3){
 			System.out.println("Id: " + orderresponse.tempid + " Security: " + orderresponse.security + " Side: " + orderresponse.side + " Quantity: " + orderresponse.quantity + " Price: " + orderresponse.price + " Type: " + orderresponse.type);
 		}
 		System.out.println("Order sended");

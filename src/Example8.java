@@ -43,6 +43,7 @@ public class Example8 {
 		
 		// get tinterfaces
 		List<ArthikaHFT.tinterfaceTick> tinterfaceTickList = wrapper.getInterface();
+		String tinterface1 = tinterfaceTickList.get(0).name;
 		
 		System.out.println("Starting Polling1");
 		List<ArthikaHFT.orderTick> orderTickList1 = wrapper.getOrder(null, null, Arrays.asList(ArthikaHFT.ORDERTYPE_PENDING, ArthikaHFT.ORDERTYPE_CANCELED));
@@ -52,8 +53,15 @@ public class Example8 {
 		System.out.println("Polling1 Finished");
 		Thread.sleep(2000);
 		
+		// get current price
+        double price = 0.0;
+        List<ArthikaHFT.priceTick> priceTickList1 = wrapper.getPrice(Arrays.asList("EUR_USD"), Arrays.asList(tinterface1), ArthikaHFT.GRANULARITY_TOB, 1);
+        for (ArthikaHFT.priceTick tick : priceTickList1)
+        {
+            price = tick.price;
+        }
+		
 		// Create pending order. If buy, order price must be lower than current price
-		String tinterface1 = tinterfaceTickList.get(0).name;
 		ArthikaHFT.orderRequest order1 = new ArthikaHFT.orderRequest();
 		order1.security = "EUR_USD";
 		order1.tinterface = tinterface1;
@@ -61,14 +69,13 @@ public class Example8 {
 		order1.side = ArthikaHFT.SIDE_BUY;
 		order1.type = ArthikaHFT.TYPE_LIMIT;
 		order1.timeinforce = ArthikaHFT.VALIDITY_DAY;
-		order1.price = 1.00548;
+		order1.price = price - 0.01;
 		
 		System.out.println("Sending order");
 		int tempid = -1;
 		String fixid = "";
 		List<ArthikaHFT.orderRequest> orderList = wrapper.setOrder(Arrays.asList(order1));
-		for (int i=0; i< orderList.size(); i++){
-			ArthikaHFT.orderRequest orderresponse = orderList.get(i);
+		for (ArthikaHFT.orderRequest orderresponse : orderList){
 			System.out.println("Id: " + orderresponse.tempid + " Security: " + orderresponse.security + " Side: " + orderresponse.side + " Quantity: " + orderresponse.quantity + " Price: " + orderresponse.price + " Type: " + orderresponse.type);
 			tempid = orderresponse.tempid;
 		}
@@ -88,8 +95,7 @@ public class Example8 {
 		
 		System.out.println("Cancel order");
 		List<ArthikaHFT.cancelTick> cancelList = wrapper.cancelOrder(Arrays.asList(fixid));
-		for (int i=0; i< cancelList.size(); i++){
-			ArthikaHFT.cancelTick cancelresponse = cancelList.get(i);
+		for (ArthikaHFT.cancelTick cancelresponse : cancelList){
 			System.out.println("FixId: " + cancelresponse.fixid + " Result: " + cancelresponse.result);
 		}
 		System.out.println("Order canceled");
