@@ -39,7 +39,7 @@ password=demo
 
 From here on we will assume it is Example1.java.
 ```
-long id1 = wrapper.getPriceBegin(Arrays.asList("GBP_USD"), null, "tob", 1, new ArthikaHFTListenerImp1());
+long id1 = wrapper.getPriceBegin(Arrays.asList("GBP_USD"), null, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTListenerImp1());
 ```
 
 In case you want to disable ssl protocol, change the following line:
