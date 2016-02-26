@@ -149,7 +149,7 @@ public class Example5 {
 			tinterface1 = tinterfaceTickList.get(0).name;
 		}
 		ArthikaHFT.orderRequest order1 = new ArthikaHFT.orderRequest();
-		order1.security = "EUR_USD";
+		order1.security = "EUR/USD";
 		order1.tinterface = tinterface1;
 		order1.quantity = 500000;
 		order1.side = ArthikaHFT.SIDE_BUY;
@@ -159,7 +159,7 @@ public class Example5 {
 		
 		String tinterface2 = tinterfaceTickList.get(0).name;
 		ArthikaHFT.orderRequest order2 = new ArthikaHFT.orderRequest();
-		order2.security = "GBP_USD";
+		order2.security = "GBP/USD";
 		order2.tinterface = tinterface2;
 		order2.quantity = 600000;
 		order2.side = ArthikaHFT.SIDE_BUY;

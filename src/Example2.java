@@ -51,14 +51,14 @@ public class Example2 {
 			tinterfacelist = new ArrayList<String>();
 			tinterfacelist.add(tinterfaceTickList.get(1).name);
 		}
-		List<ArthikaHFT.priceTick> priceTickList1 = wrapper.getPrice(Arrays.asList("EUR_USD", "EUR_GBP", "EUR_JPY", "GBP_JPY", "GBP_USD", "USD_JPY"), tinterfacelist, ArthikaHFT.GRANULARITY_TOB, 1);
+		List<ArthikaHFT.priceTick> priceTickList1 = wrapper.getPrice(Arrays.asList("EUR/USD", "EUR/GBP", "EUR/JPY", "GBP/JPY", "GBP/USD", "USD/JPY"), tinterfacelist, ArthikaHFT.GRANULARITY_TOB, 1);
 		for (ArthikaHFT.priceTick tick : priceTickList1){
 			System.out.println("Security: " + tick.security + " Price: " + String.format("%." + tick.pips + "f", tick.price) + " Side: " + tick.side + " TI: " + tick.tinterface + " Liquidity: " + tick.liquidity);
 		}
 		System.out.println("Polling1 Finished");
 		
 		System.out.println("Starting Polling2");
-		List<ArthikaHFT.priceTick> priceTickList2 = wrapper.getPrice(Arrays.asList("EUR_USD"), null, ArthikaHFT.GRANULARITY_FAB, 4);
+		List<ArthikaHFT.priceTick> priceTickList2 = wrapper.getPrice(Arrays.asList("EUR/USD"), null, ArthikaHFT.GRANULARITY_FAB, 4);
 		for (ArthikaHFT.priceTick tick : priceTickList2){
 			System.out.println("Security: " + tick.security + " Price: " + String.format("%." + tick.pips + "f", tick.price) + " Side: " + tick.side + " TI: " + tick.tinterface + " Liquidity: " + tick.liquidity);
 		}

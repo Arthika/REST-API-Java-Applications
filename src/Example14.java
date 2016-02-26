@@ -51,14 +51,14 @@ public class Example14 {
 			tinterfacelist = new ArrayList<String>();
 			tinterfacelist.add(tinterfaceTickList.get(1).name);
 		}
-		List<ArthikaHFT.candleTick> candleTickList1 = wrapper.getHistoricalPrice(Arrays.asList("EUR_USD", "EUR_GBP", "EUR_JPY", "GBP_JPY", "GBP_USD", "USD_JPY"), tinterfacelist, ArthikaHFT.CANDLE_GRANULARITY_10MINUTES, ArthikaHFT.SIDE_ASK, 5);
+		List<ArthikaHFT.candleTick> candleTickList1 = wrapper.getHistoricalPrice(Arrays.asList("EUR/USD", "EUR/GBP", "EUR/JPY", "GBP/JPY", "GBP/USD", "USD/JPY"), tinterfacelist, ArthikaHFT.CANDLE_GRANULARITY_10MINUTES, ArthikaHFT.SIDE_ASK, 5);
 		for (ArthikaHFT.candleTick tick : candleTickList1){
 			System.out.println("Security: " + tick.security + " tinterface: " + tick.tinterface +  " TimeStamp: " + tick.timestamp +  " Side: " + tick.side + " Open: " + tick.open + " High: " + tick.high + " Low: " + tick.low + " Close: " + tick.close + " Ticks: " + tick.ticks);
 		}
 		System.out.println("Candle list 1 Finished");
 		
 		System.out.println("Starting Candle list 2");
-		List<ArthikaHFT.candleTick> candleTickList2 = wrapper.getHistoricalPrice(Arrays.asList("EUR_USD"), null, ArthikaHFT.CANDLE_GRANULARITY_30MINUTES, ArthikaHFT.SIDE_BID, 3);
+		List<ArthikaHFT.candleTick> candleTickList2 = wrapper.getHistoricalPrice(Arrays.asList("EUR/USD"), null, ArthikaHFT.CANDLE_GRANULARITY_30MINUTES, ArthikaHFT.SIDE_BID, 3);
 		for (ArthikaHFT.candleTick tick : candleTickList2){
 			System.out.println("Security: " + tick.security + " tinterface: " + tick.tinterface +  " TimeStamp: " + tick.timestamp +  " Side: " + tick.side + " Open: " + tick.open + " High: " + tick.high + " Low: " + tick.low + " Close: " + tick.close + " Ticks: " + tick.ticks);
 		}

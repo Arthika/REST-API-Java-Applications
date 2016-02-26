@@ -46,7 +46,7 @@ public class Example6 {
 		List<ArthikaHFT.tinterfaceTick> tinterfaceTickList = wrapper.getInterface();
 
 		System.out.println("Starting Polling1");
-		List<ArthikaHFT.orderTick> orderTickList1 = wrapper.getOrder(Arrays.asList("EUR_USD", "GBP_JPY", "GBP_USD"), null, null);
+		List<ArthikaHFT.orderTick> orderTickList1 = wrapper.getOrder(Arrays.asList("EUR/USD", "GBP/JPY", "GBP/USD"), null, null);
 		for (ArthikaHFT.orderTick tick : orderTickList1){
 			System.out.println("TempId: " + tick.tempid + " OrderId: " + tick.orderid + " Security: " + tick.security + " Account: " + tick.account + " Quantity: " + tick.quantity + " Type: " + tick.type + " Side: " + tick.side + " Status: " + tick.status);
 		}

@@ -39,7 +39,7 @@ password=demo
 
 From here on we will assume it is Example1.java.
 ```
-long id1 = wrapper.getPriceBegin(Arrays.asList("GBP_USD"), null, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTListenerImp1());
+long id1 = wrapper.getPriceBegin(Arrays.asList("GBP/USD"), null, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTListenerImp1());
 ```
 
 In case you want to disable ssl protocol, change the following line:
@@ -61,15 +61,15 @@ $ export JARS=lib/commons-codec-1.9.jar:lib/commons-logging-1.2.jar:lib/fluent-h
 $ java -cp $JARS src/Example1
 
 Response timestamp: 1445961714.977141 Contents:
-Security: GBP_USD Price: 1.5312 Side: ask Liquidity: 10000000
-Security: GBP_USD Price: 1.5312 Side: bid Liquidity: 10000000
-Security: GBP_USD Price: 1.5312 Side: ask Liquidity: 10000000
-Security: GBP_USD Price: 1.53129 Side: bid Liquidity: 2000000
+Security: GBP/USD Price: 1.5312 Side: ask Liquidity: 10000000
+Security: GBP/USD Price: 1.5312 Side: bid Liquidity: 10000000
+Security: GBP/USD Price: 1.5312 Side: ask Liquidity: 10000000
+Security: GBP/USD Price: 1.53129 Side: bid Liquidity: 2000000
 Response timestamp: 1445961715.334755 Contents:
-Security: GBP_USD Price: 1.5312 Side: ask Liquidity: 10000000
-Security: GBP_USD Price: 1.5312 Side: bid Liquidity: 10000000
-Security: GBP_USD Price: 1.5312 Side: ask Liquidity: 10000000
-Security: GBP_USD Price: 1.53134 Side: bid Liquidity: 500000
+Security: GBP/USD Price: 1.5312 Side: ask Liquidity: 10000000
+Security: GBP/USD Price: 1.5312 Side: bid Liquidity: 10000000
+Security: GBP/USD Price: 1.5312 Side: ask Liquidity: 10000000
+Security: GBP/USD Price: 1.53134 Side: bid Liquidity: 500000
 ```
 #### Going further
 Using IDE's such as Eclipse or Netbeans

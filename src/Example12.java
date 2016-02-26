@@ -194,7 +194,7 @@ public class Example12 {
 		}
 
 		// Open price streaming
-		long id1 = wrapper.getPriceBegin(Arrays.asList("EUR_USD"), tinterfacelist, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTListenerImp12());
+		long id1 = wrapper.getPriceBegin(Arrays.asList("EUR/USD"), tinterfacelist, ArthikaHFT.GRANULARITY_TOB, 1, interval, new ArthikaHFTListenerImp12());
 		Thread.sleep(20000);
 
 		// Close price streaming
@@ -267,13 +267,13 @@ public class Example12 {
 				orderbid.price = bestcanbid;
 			}
 			
-			orderask.security = "EUR_USD";
+			orderask.security = "EUR/USD";
 			orderask.quantity = quantity;
 			orderask.side = ArthikaHFT.SIDE_BUY;
 			orderask.type = ArthikaHFT.TYPE_LIMIT;
 			orderask.timeinforce = ArthikaHFT.VALIDITY_DAY;
 			
-			orderbid.security = "EUR_USD";
+			orderbid.security = "EUR/USD";
 			orderbid.quantity = quantity;
 			orderbid.side = ArthikaHFT.SIDE_SELL;
 			orderbid.type = ArthikaHFT.TYPE_LIMIT;

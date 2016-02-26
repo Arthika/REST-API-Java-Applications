@@ -46,7 +46,7 @@ public class Example4 {
 		List<ArthikaHFT.accountTick> accountTickList = wrapper.getAccount();
 
 		System.out.println("Starting Polling1");
-		ArthikaHFT.positionTick positionTickList1 = wrapper.getPosition(null, Arrays.asList("EUR_USD", "GBP_JPY", "GBP_USD"), null);
+		ArthikaHFT.positionTick positionTickList1 = wrapper.getPosition(null, Arrays.asList("EUR/USD", "GBP/JPY", "GBP/USD"), null);
 		System.out.println("StrategyPL: " + positionTickList1.accountingTick.strategyPL + " TotalEquity: " + positionTickList1.accountingTick.totalequity + " UsedMargin: " + positionTickList1.accountingTick.usedmargin + " FreeMargin: " + positionTickList1.accountingTick.freemargin);
 		for (ArthikaHFT.assetPositionTick tick : positionTickList1.assetPositionTickList){
 			System.out.println("Asset: " + tick.asset + " Account: " + tick.account + " Exposure: " + tick.exposure + " TotalRisk: " + tick.totalrisk);

@@ -53,14 +53,14 @@ public class Example7 {
 		}
 		
 		ArthikaHFT.orderRequest order1 = new ArthikaHFT.orderRequest();
-		order1.security = "EUR_USD";
+		order1.security = "EUR/USD";
 		order1.tinterface = tinterface;
 		order1.quantity = 500000;
 		order1.side = ArthikaHFT.SIDE_BUY;
 		order1.type = ArthikaHFT.TYPE_MARKET;
 
 		System.out.println("Starting Polling1");
-		List<ArthikaHFT.orderTick> orderTickList1 = wrapper.getOrder(Arrays.asList("EUR_USD"), Arrays.asList(tinterface), null);
+		List<ArthikaHFT.orderTick> orderTickList1 = wrapper.getOrder(Arrays.asList("EUR/USD"), Arrays.asList(tinterface), null);
 		for (ArthikaHFT.orderTick tick : orderTickList1){
 			System.out.println("TempId: " + tick.tempid + " OrderId: " + tick.orderid + " Security: " + tick.security + " Account: " + tick.account + " Quantity: " + tick.quantity + " Type: " + tick.type + " Side: " + tick.side + " Status: " + tick.status);
 		}
@@ -76,7 +76,7 @@ public class Example7 {
 		Thread.sleep(2000);
 		
 		System.out.println("Starting Polling2");
-		List<ArthikaHFT.orderTick> orderTickList2 = wrapper.getOrder(Arrays.asList("EUR_USD"), Arrays.asList(tinterface), null);
+		List<ArthikaHFT.orderTick> orderTickList2 = wrapper.getOrder(Arrays.asList("EUR/USD"), Arrays.asList(tinterface), null);
 		for (ArthikaHFT.orderTick tick : orderTickList2){
 			System.out.println("TempId: " + tick.tempid + " OrderId: " + tick.orderid + " Security: " + tick.security + " Account: " + tick.account + " Quantity: " + tick.quantity + " Type: " + tick.type + " Side: " + tick.side + " Status: " + tick.status);
 		}

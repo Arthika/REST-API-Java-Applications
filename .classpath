@@ -11,7 +11,5 @@
 	<classpathentry kind="lib" path="lib/httpcore-4.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpmime-4.5.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-all-1.9.9.jar"/>
-	<classpathentry kind="lib" path="lib/jna-4.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/jna-platform-4.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
